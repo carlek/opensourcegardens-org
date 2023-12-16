@@ -52,7 +52,8 @@ actor {
                 return #ok(());
             };
             case _ {
-                return #err("Caller is already a member");
+                return #err("Caller "#
+                            Principal.toText(caller)#" is already a member");
             };
         };
     };
