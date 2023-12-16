@@ -4,6 +4,7 @@ import Result "mo:base/Result";
 import HashMap "mo:base/HashMap";
 import Buffer "mo:base/Buffer";
 import List "mo:base/List";
+import Iter "mo:base/Iter";
 import Http "lib/http";
 import Logo "lib/Logo";
 import Lib "lib/lib";
@@ -131,9 +132,9 @@ actor {
         webpage := webpage # "<hr>";
         webpage := webpage # "<h2>Our goals:</h2>";
         webpage := webpage # "<ul>";
-        // for (goal in goals.vals()) {
-        //     webpage := webpage # "<li>" # goal # "</li>";
-        // };
+        for (goal in Iter.fromList(goals)) {
+            webpage := webpage # "<li>" # goal # "</li>";
+        };
         webpage := webpage # "</ul>";
         return webpage;
     };
