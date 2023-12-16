@@ -3,11 +3,13 @@ import Text "mo:base/Text";
 import Result "mo:base/Result";
 import HashMap "mo:base/HashMap";
 import Buffer "mo:base/Buffer";
+import List "mo:base/List";
 import Http "lib/http";
 import Logo "lib/Logo";
 import Lib "lib/lib";
 
 actor {
+    public type List<T> = ?(T, List<T>);
 
     // Define a name for you DAO
     let name : Text = "GardenVille";
@@ -21,15 +23,14 @@ actor {
     let theDao = Lib.setManifesto(Lib.initDao(), "Gardening Community of the Future");
 
     // list of goals
-    var goals = Buffer.Buffer<Text>(100);
+    var goals : List<Text> = null;
 
-    // add goal
     public func addGoal(goal : Text) : async () {
-        goals.add(goal);
+        goals := List.push<Text>(goal, goals);
     };
 
     public query func getGoals() : async [Text] {
-        Buffer.toArray(goals);
+        List.toArray<Text>(goals);
     };
 
     type Member = {
