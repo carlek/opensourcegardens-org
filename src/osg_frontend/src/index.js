@@ -17,23 +17,26 @@ whoAmIButton.onclick = async (e) => {
     return false;
 };
 
-const emptyRequest = {
-    body: new Uint8Array(),
-    headers: [],
-    method: '',
-    url: '',
-  };
-
 const daoButton = document.getElementById("daoButton");
+const daoSection = document.getElementById("dao");
+
 daoButton.onclick = async (e) => {
     e.preventDefault();
     daoButton.setAttribute("disabled", true);
-    const webpage = await actor.dao_webpage(emptyRequest);
-    const webpageText = new TextDecoder().decode(webpage.body);
-    const newTab = window.open('DAO');
-    newTab.document.write(webpageText); 
+
+    const data = await actor.getDaoData();
+    
+    daoSection.innerHTML = 
+    `<p><strong>Name:</strong> ${data.name}</p>
+    <p><strong>Manifesto:</strong> ${data.manifesto}</p>
+    <p><strong>Logo:</strong></p>
+        <div>${data.logo}</div>
+    <h2>Goals:</h2>
+    <table border="1">
+        ${data.goals.map(goal => `<tr><td>${goal}</td></tr>`).join("")}
+    </table>`;
+
     daoButton.removeAttribute("disabled");
-    // document.getElementById("dao").innerText = "<goto DAO tab>";
     return false;
 };
 
@@ -65,6 +68,3 @@ loginButton.onclick = async (e) => {
     });
     return false;
 };
-
-
-

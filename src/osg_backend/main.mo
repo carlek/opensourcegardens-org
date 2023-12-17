@@ -5,6 +5,7 @@ import HashMap "mo:base/HashMap";
 import Buffer "mo:base/Buffer";
 import List "mo:base/List";
 import Iter "mo:base/Iter";
+import Array "mo:base/Array";
 import Http "lib/http";
 import Logo "lib/Logo";
 import Lib "lib/lib";
@@ -13,27 +14,27 @@ actor {
     public type List<T> = ?(T, List<T>);
 
     // Define a name for you DAO
-    let name : Text = "GardenVille";
+    let daoName : Text = "GardenVille DAO";
 
     // get name
-    public query func getName() : async Text {
-        return name;
+    public query func getDaoName() : async Text {
+        return daoName;
     };
 
-    // let theDao = Lib.initDao();
-    let theDao = Lib.setManifesto(Lib.initDao(), "Gardening Community of the Future");
-
-    // list of goals
-    var goals : List<Text> = null;
+    var theDao = Lib.initDao();
+    theDao := Lib.setManifesto(theDao, "Gardening Community of the Future");
+    theDao := Lib.setName(theDao, "GardenVille DAO");
 
     public func addGoal(goal : Text) : async () {
-        goals := List.push<Text>(goal, goals);
+        theDao := await Lib.addGoal(theDao, goal);
+        return ();
     };
 
-    public query func getGoals() : async [Text] {
-        List.toArray<Text>(goals);
+    public func getGoals() : async [Text] {
+        let goalsList = await Lib.getGoals(theDao);
+        return List.toArray(goalsList);
     };
-
+    
     type Member = {
         name : Text;
         age : Nat;
@@ -52,8 +53,11 @@ actor {
                 return #ok(());
             };
             case _ {
-                return #err("Caller "#
-                            Principal.toText(caller)#" is already a member");
+                return #err(
+                    "Caller " #
+                    Principal.toText(caller) #
+                    " is already a member"
+                );
             };
         };
     };
@@ -106,50 +110,29 @@ actor {
         };
     };
 
-
     public query (message) func whoami() : async Text {
         return "Hello, " # Principal.toText(message.caller) # " !";
     };
 
-    func _getWebpage() : Text {
-        var webpage = "<style>" #
-        "body { text-align: center; font-family: Arial, sans-serif; background-color: #f0f8ff; color: #333; }" #
-        "h1 { font-size: 3em; margin-bottom: 10px; }" #
-        "hr { margin-top: 20px; margin-bottom: 20px; }" #
-        "em { font-style: italic; display: block; margin-bottom: 20px; }" #
-        "ul { list-style-type: none; padding: 0; }" #
-        "li { margin: 10px 0; }" #
-        "li:before { content: '👉 '; }" #
-        "svg { max-width: 150px; height: auto; display: block; margin: 20px auto; }" #
-        "h2 { text-decoration: underline; }" #
-        "</style>";
+    type DaoData = {
+        name: Text;
+        manifesto: Text;
+        logo: Text;
+        goals: [Text];
+    };
+    public func getDaoData() : async DaoData {
+        let name = await Lib.getName(theDao);
+        let theManifesto : Text = await Lib.getManifesto(theDao);
+        let logo : Text = await Lib.getLogo(theDao);
+        let goalsList = await Lib.getGoals(theDao);
 
-        let theManifesto: Text = Lib.getManifesto(theDao);
-        let logo : Text = Logo.getLogo();
-
-        webpage := webpage # "<div><h1>" # name # "</h1></div>";
-        webpage := webpage # "<em>" # theManifesto # "</em>";
-        webpage := webpage # "<div>" # logo # "</div>";
-        webpage := webpage # "<hr>";
-        webpage := webpage # "<h2>Our goals:</h2>";
-        webpage := webpage # "<ul>";
-        for (goal in Iter.fromList(goals)) {
-            webpage := webpage # "<li>" # goal # "</li>";
+        let data = {
+            name: Text = name;
+            manifesto: Text = theManifesto;
+            logo: Text = logo;
+            goals: [Text] = List.toArray(goalsList);
         };
-        webpage := webpage # "</ul>";
-        return webpage;
+        return (data);
     };
 
-    public query func dao_webpage(request : Http.Request) : async Http.Response {
-
-        let page = _getWebpage();
-        let response = {
-            body = Text.encodeUtf8(page);
-            // body = Text.encodeUtf8("Hello world");
-            headers = [("Content-Type", "text/html; charset=UTF-8")];
-            status_code = 200 : Nat16;
-            streaming_strategy = null;
-        };
-        return (response);
-    };
 };
