@@ -25,16 +25,25 @@ daoButton.onclick = async (e) => {
     daoButton.setAttribute("disabled", true);
 
     const data = await actor.getDaoData();
-    
-    daoSection.innerHTML = 
-    `<p><strong>Name:</strong> ${data.name}</p>
-    <p><strong>Manifesto:</strong> ${data.manifesto}</p>
-    <p><strong>Logo:</strong></p>
-        <div>${data.logo}</div>
-    <h2>Goals:</h2>
-    <table border="1">
-        ${data.goals.map(goal => `<tr><td>${goal}</td></tr>`).join("")}
-    </table>`;
+
+    daoSection.innerHTML = `
+    <div class="dao-container">
+        <div class="overlay-container">
+            <div class="logo-container">
+                <img src="data:image/svg+xml,${encodeURIComponent(data.logo)}" alt="Logo">
+                <div class="overlay-text">
+                    <p class="bold-text">${data.name}</p>
+                    <p>${data.manifesto}</p>
+                </div>
+            </div>
+        </div>
+        <div class="goals-container">
+            <h2 class="bold-text">Goals</h2>
+            <table border="1">
+                ${data.goals.map(goal => `<tr><td>${goal}</td></tr>`).join("")}
+            </table>
+        </div>
+    </div>`;
 
     daoButton.removeAttribute("disabled");
     return false;

@@ -21,9 +21,9 @@ actor {
         return daoName;
     };
 
-    var theDao = Lib.initDao();
-    theDao := Lib.setManifesto(theDao, "Gardening Community of the Future");
-    theDao := Lib.setName(theDao, "GardenVille DAO");
+    stable var theDao = Lib.initDao();
+    theDao := Lib.setName(theDao, "Open Source Gardens DAO");
+    theDao := Lib.setManifesto(theDao, "Your Web3 Garden Community");
 
     public func addGoal(goal : Text) : async () {
         theDao := await Lib.addGoal(theDao, goal);
@@ -34,7 +34,7 @@ actor {
         let goalsList = await Lib.getGoals(theDao);
         return List.toArray(goalsList);
     };
-    
+
     type Member = {
         name : Text;
         age : Nat;
@@ -115,10 +115,10 @@ actor {
     };
 
     type DaoData = {
-        name: Text;
-        manifesto: Text;
-        logo: Text;
-        goals: [Text];
+        name : Text;
+        manifesto : Text;
+        logo : Text;
+        goals : [Text];
     };
     public func getDaoData() : async DaoData {
         let name = await Lib.getName(theDao);
@@ -127,12 +127,11 @@ actor {
         let goalsList = await Lib.getGoals(theDao);
 
         let data = {
-            name: Text = name;
-            manifesto: Text = theManifesto;
-            logo: Text = logo;
-            goals: [Text] = List.toArray(goalsList);
+            name : Text = name;
+            manifesto : Text = theManifesto;
+            logo : Text = logo;
+            goals : [Text] = List.toArray(goalsList);
         };
         return (data);
     };
-
 };

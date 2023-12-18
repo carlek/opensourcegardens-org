@@ -1,0 +1,77 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+form {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.dao-container {
+    text-align: center;
+}
+
+.overlay-container {
+    position: relative;
+    display: inline-block;
+}
+
+.logo-container {
+    position: relative;
+    display: inline-block;
+}
+
+.overlay-text {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    margin-bottom: 10px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #333; 
+    z-index: 1; /* on top of logo */
+    font-family: cursive, fantasy, sans-serif; 
+    font-size: 30px;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.goals-container {
+    margin-top: 20px;
+    font-family: cursive, fantasy, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, th, td {
+    border: 12px solid #333;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
