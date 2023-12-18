@@ -38,7 +38,7 @@ daoButton.onclick = async (e) => {
             </div>
         </div>
         <div class="goals-container">
-            <h2 class="bold-text">Goals</h2>
+            <h1 class="bold-text">Goals</h1>
             <table border="1">
                 ${data.goals.map(goal => `<tr><td>${goal}</td></tr>`).join("")}
             </table>
